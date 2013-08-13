@@ -31,11 +31,11 @@ require.config({
 require([
     'deck',
     'boxes'
-], function (DeckJs, BoxesView) {
-    DeckJs(".slide");
-    console.log("Loaded Deck");
+], function (deckJs, BoxesView) {
+    deckJs('.slide');
+    console.log('Loaded Deck');
 
     // TODO: Create only when loading the first slide
     new BoxesView();
-    console.log("Loaded Boxes");
+    console.log('Loaded Boxes');
 });

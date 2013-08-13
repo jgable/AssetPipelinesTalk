@@ -1,4 +1,6 @@
+/* global define */
 define(['jquery', 'backbone', 'underscore'], function ($, Backbone, _) {
+	'use strict';
 
 	var boxTemplate,
 		colorMap,
@@ -7,10 +9,10 @@ define(['jquery', 'backbone', 'underscore'], function ($, Backbone, _) {
 		BoxesView;
 
 	colorMap = {
-		0: "one",
-		1: "two",
-		2: "three",
-		3: "four"
+		0: 'one',
+		1: 'two',
+		2: 'three',
+		3: 'four'
 	};
 
 	BoxModel = Backbone.Model.extend({
@@ -23,7 +25,7 @@ define(['jquery', 'backbone', 'underscore'], function ($, Backbone, _) {
 				randomDelay = 2000 + Math.floor(Math.random() * 2000);
 
 			this.intervalId = setInterval(function () {
-				self.set({color: self.getRandomColor()})
+				self.set({color: self.getRandomColor()});
 			}, randomDelay);
 		},
 
@@ -39,13 +41,13 @@ define(['jquery', 'backbone', 'underscore'], function ($, Backbone, _) {
 
 	});
 
-	boxTemplate = _.template("<div class='color <%= color %>'></div>");
+	boxTemplate = _.template('<div class="color <%= color %>"></div>');
 
 	BoxView = Backbone.View.extend({
 		className: 'box',
 
 		initialize: function () {
-			this.model.on("change:color", this.transitionColor, this);
+			this.model.on('change:color', this.transitionColor, this);
 		},
 
 		render: function () {
@@ -58,11 +60,11 @@ define(['jquery', 'backbone', 'underscore'], function ($, Backbone, _) {
 
 		transitionColor: function () {
 			// Generate the next color element
-			var $current = this.$el.find(".color"),
+			var $current = this.$el.find('.color'),
 				$next = $(boxTemplate(this.model.toJSON()));
 
-			$next.one("transitionend webkitTransitionEnd oTransitionEnd otransitionend", function () {
-				console.log("Removing old element");
+			// Subscribe to the transitionend event
+			$next.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function () {
 				// Remove the old .color element after transitioned
 				$current.remove();
 
@@ -72,23 +74,25 @@ define(['jquery', 'backbone', 'underscore'], function ($, Backbone, _) {
 					 .removeClass('transition');
 			});
 
-			$next.addClass("next");
+			$next.addClass('next');
 
 			// Add the next color to this view
 			this.$el.append($next);
 
-			// Kick off the transition after a wait so the .next class is applied
+			// Kick off the transition after a wait so the .next class has time to apply
 			_.defer(function () {
-				$next.addClass("transition");
+				$next.addClass('transition');
 			});
 		}
 	});
 
 	BoxesView = Backbone.View.extend({
-		el: "#boxes",
+		el: '#boxes',
 
 		initialize: function () {
-			// A collection of box models auto generated
+			_.bindAll(this, 'render', 'createBoxView');
+
+			// Auto generate a collection of box models
 			this.collection = new Backbone.Collection([
 				new BoxModel({color: colorMap[0]}),
 				new BoxModel({color: colorMap[1]}),
@@ -97,29 +101,30 @@ define(['jquery', 'backbone', 'underscore'], function ($, Backbone, _) {
 			]);
 
 			// Auto render for simplicity
-			this.render();
+			_.defer(this.render);
 		},
 
 		render: function () {
-			var self = this;
-			
-			this.boxes = this.collection.map(function (model) {
-				var randDelay = Math.floor((Math.random() * 2000)),
-					// Instantiate and render the box view
-					view = new BoxView({model: model}).render();
-
-				// Start the color changing after a random delay
-				setTimeout(function () {
-					model.startChanging();
-				}, randDelay);
-
-				// Append the box view to our boxes container
-				self.$el.append(view.$el);
-
-				return view;
-			});
+			// Create and store the box views from the box models
+			this.boxes = this.collection.map(this.createBoxView);
 
 			return this;
+		},
+
+		createBoxView: function (model) {
+			var randDelay = Math.floor((Math.random() * 2000)),
+				// Instantiate and render the box view
+				view = new BoxView({model: model}).render();
+
+			// Start the color changing after a random delay
+			setTimeout(function () {
+				model.startChanging();
+			}, randDelay);
+
+			// Append the box view to our boxes container
+			this.$el.append(view.$el);
+
+			return view;
 		}
 	});
 
