@@ -1,0 +1,260 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Asset Pipelines in Node - That Conference 2013 - Jacob Gable</title>
+        <meta name="description" content="A brief walkthrough of the available asset pipeline management techniques in Node.js; including connect-assets, Asset Rack and Yeoman/Grunt.">
+        <meta name="viewport" content="width=device-width">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        
+        <link rel="stylesheet" href="styles/main.css">
+        <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+        
+        <!-- build:js scripts/vendor/modernizr.js -->
+        <script src="bower_components/modernizr/modernizr.js"></script>
+        <!-- endbuild -->
+    </head>
+    <body class="deck-container">
+        <section class="slide" id="start">
+            <h2>Asset Pipelines in Node</h2>
+
+            <h3>
+                With your friend <span class="highlight">Jacob Gable</span>
+            </h3>
+
+            <h3 style="text-align: center; margin-top: 20px">
+                Look!  Boxes!<br />
+
+                &#9660;
+            </h3>
+
+            <div id="boxes">
+                <!--
+                <div class="box">
+                    <div class="color one">
+
+                    </div>
+                    <div class="next color two">
+                    </div>
+                </div>
+                -->
+            </div>
+        </section>
+
+        <section class="slide" id="about-me">
+            <h2>About Me</h2>
+
+            <p>Jacob Gable is a software developer focused mainly on web technologies located in Chicago, IL.</p>
+
+            <ul class="slide bare" id="about-me-details">
+                <li class='images'>
+                    <img class="sprout" src="/images/sprout-logo.png" alt="">
+                    <img class="ghost" src="/images/Ghost-Logo.png" alt="">
+                    
+                    <div class="github">
+                        <h3><span class="highlight">github</span>.com/jgable</h3>
+                        <h3><span class="highlight">npm</span>js.org/~jgable</h3>
+                    </div>
+                
+                    <img class="twitter-tweet" src="images/Twitter.png" alt="">
+                </li>
+            </ul>
+
+        </section>
+
+        <section class="slide" id="sponsors">
+            <h2>Obligatory Sponsor Slide</h2>
+
+            <h3 style="text-align: center">Platinum</h3>
+            <img src="/images/PlatinumSponsors.png">
+
+            <h4 style="text-align: center">Gold</h4>
+            <img src="/images/GoldSponsors.png">
+        </section>
+
+        <section class="slide" id="survey">
+            <h2>Quick Survey</h2>
+
+            <ul>
+                <li class="slide" id="question1">Who works on a product or service site where page performance is important?</li>
+                <li class="slide" id="question2">Who uses some kind of module loader like RequireJS?</li>
+            </ul>
+
+            <div class="slide" id="like-you">
+                <img src="/images/likeyouthewayyouare.jpg" width="400">
+            </div>
+        </section>
+
+        <section class="slide" id="agenda">
+            <h2>Agenda</h2>
+
+            <ul class="slide" id="agenda-details">
+                <li>What makes a good asset pipeline?</li>
+                <li>What’s out there right now?</li>
+                <li>Connect-Assets Walkthrough</li>
+                <li>Asset Rack Walkthrough</li>
+                <li>Yeoman/Grunt Walkthrough</li>
+            </ul>
+        </section>
+
+        <section class="slide" id="good-asset-pipelines">
+            <h2>Good Asset Pipelines</h2>
+            <ul>
+                <li>Make Websites Fast</li>
+                <li>Make Development Easier</li>
+                <li>Encourage Good Development Practices</li>
+            </ul>
+
+            <img id="weaknessstraps" src="/images/weaknessstraps.jpg">
+        </section>
+
+        <section class="slide" id="fast-websites">
+            <h2>Making Websites Fast</h2>
+
+            <h3 class="highlight">Reduce Request Quantity and Size</h3>
+
+            <ul class="slide" id="fast-websites-details">
+                <li>Compile preprocessed files</li>
+                <li>Concatenate files</li>
+                <li>Minify files</li>
+                <li>Set Appropriate Cache Headers</li>
+                <li>Load from CDN</li>
+            </ul>
+        </section>
+
+        <section class="slide" id="fast-development">
+            <h2>Making Development Easier</h2>
+
+            <h3 class="highlight">Fast Debugging with Fast Performance</h3>
+
+            <ul>
+                <li class="slide" id="productive-techs">
+                    Use technologies that make us more productive
+                    <ul>
+                        <li>CoffeeScript</li>
+                        <li>TypeScript</li>
+                        <li>LESS</li>
+                        <li>SASS</li>
+                    </ul>
+                </li>
+                <li class="slide" id="productive-tools">
+                    Use tools that make it easier to figure out problems
+                    <ul>
+                        <li>Source Maps</li>
+                        <li>LiveReload</li>
+                        <li>Logging Verbosity</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <section class="slide" id="good-practices">
+            <h2>Encourage Good Development Practices</h2>
+
+            <h3 class="highlight">Make it easy to write good code, fast</h3>
+
+            <ul class="slide">
+                <li>Quality checks with JSHint</li>
+                <li>Unit Testing</li>
+                <li>Easily add new files without much code</li>
+                <li>Support module loaders like RequireJS or AlmondJS</li>
+            </ul>
+        </section>
+
+        <section class="slide" id="connect-assets">
+            <h2>connect-assets</h2>
+
+            <h3 class="pro">Pros</h3>
+
+            <ul>
+                <li>Easy to get setup</li>
+                <li>Supports Coffee, Typescript, LESS, Stylus</li>
+                <li>Hashes and Caches (<span class='highlight'>&trade;</span>) built assets in productions mode</li>
+            </ul>
+
+            <h3 class="con">Cons</h3>
+
+            <ul>
+                <li>No Image Minification</li>
+                <li>Hard to work with script loaders like RequireJS</li>
+                <li>Development in flux</li>
+            </ul>
+        </section>
+
+        <section class="slide" id="asset-rack">
+            <h2>Asset Rack</h2>
+
+            <h3 class="pro">Pros</h3>
+
+            <ul>
+                <li>Easy to integrate to existing site</li>
+                <li>Supports same types as connect-assets and custom ones</li>
+                <li>Can upload to CDN for you</li>
+            </ul>
+
+            <h3 class="con">Cons</h3>
+
+            <ul>
+                <li>No Image Minification</li>
+                <li>Still tricky to work with RequireJS</li>
+                <li>More configuration than convention</li>
+            </ul>
+
+        </section>
+
+        <section class="slide" id="yeoman-grunt">
+            <h2>Yeoman / Grunt</h2>
+
+            <h3 class="pro">Pros</h3>
+
+            <ul>
+                <li>Good solid foundation for a site</li>
+                <li>LiveReload support</li>
+                <li>Build based instead of having to start the server</li>
+            </ul>
+
+            <h3 class="con">Cons</h3>
+
+            <ul>
+                <li>Completely different strategy</li>
+                <li>Most Generators default to a setup using RequireJS</li>
+                <li>Hard to convert an existing site</li>
+            </ul>
+
+        </section>
+
+        <section class="slide" id="wrapping-up">
+            <h2>Wrapping Up</h2>
+
+            <ul>
+                <li>Yahoo! Best Practices for Speed - developer.yahoo.com/performance/rules.html</li>
+                <li>Connect-assets - github.com/adunkman/connect-assets</li>
+                <li>Asset Rack - github.com/techpines/asset-rack</li>
+                <li>Yeoman/Grunt - yeoman.io</li>
+            </ul>
+        </section>
+
+        <section class="slide" id="the-end">
+            <h2>The End</h2>
+
+            <img src="/images/NextYear.png" width="800">
+        </section>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. 
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+        -->
+
+        <!-- build:js scripts/main.js -->
+        <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
+        <!-- endbuild -->
+</body>
+</html>
