@@ -25,7 +25,8 @@ define(['jquery', 'backbone', 'underscore'], function ($, Backbone, _) {
 				randomDelay = 2000 + Math.floor(Math.random() * 2000);
 
 			this.intervalId = setInterval(function () {
-				self.set({color: self.getRandomColor()});
+                self.collection.enqueueChange(self); 
+				//self.set({color: self.getRandomColor()});
 			}, randomDelay);
 		},
 
@@ -58,31 +59,10 @@ define(['jquery', 'backbone', 'underscore'], function ($, Backbone, _) {
 			return this;
 		},
 
-		transitionColor: function () {
-			// Generate the next color element
-			var $current = this.$el.find('.color'),
-				$next = $(boxTemplate(this.model.toJSON()));
-
-			// Subscribe to the transitionend event
-			$next.one('transitionend webkitTransitionEnd oTransitionEnd otransitionend', function () {
-				// Remove the old .color element after transitioned
-				$current.remove();
-
-				// Remove the extra classes from the next element
-				// TODO: Necessary?
-				$next.removeClass('next')
-					 .removeClass('transition');
-			});
-
-			$next.addClass('next');
-
-			// Add the next color to this view
-			this.$el.append($next);
-
-			// Kick off the transition after a wait so the .next class has time to apply
-			_.defer(function () {
-				$next.addClass('transition');
-			});
+		transitionColor: function (model) {
+			var $el = this.$el.find('.color');
+            $el.removeClass(model.previous("color"));
+            $el.addClass(model.get("color"));
 		}
 	});
 
@@ -91,14 +71,28 @@ define(['jquery', 'backbone', 'underscore'], function ($, Backbone, _) {
 
 		initialize: function () {
 			_.bindAll(this, 'render', 'createBoxView');
+            var self = this;
+            var boxCount = _.range(2000);
+            var boxes = _.map(boxCount, function (each, i) {
+				return new BoxModel({color: colorMap[i % 4]});
+            });
 
-			// Auto generate a collection of box models
-			this.collection = new Backbone.Collection([
-				new BoxModel({color: colorMap[0]}),
-				new BoxModel({color: colorMap[1]}),
-				new BoxModel({color: colorMap[2]}),
-				new BoxModel({color: colorMap[3]})
-			]);
+			this.collection = new Backbone.Collection(boxes);
+            this.collection.queue = [];
+            this.collection.enqueueChange = function (model) {
+               this.queue.push(model);  
+            };
+            this.collection.flushQueue = function () {
+               _.forEach(this.queue, function (model) {
+                    model.set({color: model.getRandomColor()}); 
+               });
+               this.queue = [];
+            };
+            setInterval(function () {
+               requestAnimationFrame(function () {
+                   self.collection.flushQueue();
+               });
+            }, 500); 
 
 			// Auto render for simplicity
 			_.defer(this.render);
@@ -107,7 +101,6 @@ define(['jquery', 'backbone', 'underscore'], function ($, Backbone, _) {
 		render: function () {
 			// Create and store the box views from the box models
 			this.boxes = this.collection.map(this.createBoxView);
-
 			return this;
 		},
 

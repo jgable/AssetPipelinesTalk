@@ -129,11 +129,11 @@ ul.bare {
 
 // Boxes styles
 
-@boxWidth: 180px;
+@boxWidth: 45px;
 @boxGutter: 5px;
 
 #boxes {
-	width: (@boxWidth + (@boxGutter * 2)) * 4;
+	width: 90%;
 	margin: 40px auto;
 
 	.box {
@@ -148,18 +148,14 @@ ul.bare {
 			height: @boxWidth;
 			position: absolute;
 
-			&.next {
-				width: 0;
+            -moz-transition:width 1s, height 1s, background-color 1s, -moz-transform 1s;
+            -webkit-transition:width 1s, height 1s, background-color 1s, -webkit-transform 1s;
+            -o-transition:width 1s, height 1s, background-color 1s, -o-transform 1s;
+            transition:width 1s, height 1s, background-color 1s, transform 1s;
 
-				-moz-transition:width 1s, height 1s, background-color 1s, -moz-transform 1s;
-    			-webkit-transition:width 1s, height 1s, background-color 1s, -webkit-transform 1s;
-    			-o-transition:width 1s, height 1s, background-color 1s, -o-transform 1s;
-    			transition:width 1s, height 1s, background-color 1s, transform 1s;
-
-    			&.transition {
-					width: @boxWidth;	
-				}
-			}
+            &.transition {
+                width: @boxWidth;	
+            }
 
 			&.one {
 				background-color: @primaryColor;
